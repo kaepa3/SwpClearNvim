@@ -1,5 +1,5 @@
 -- main module file
-local module = require("swpclearnvim.module")
+local module = require("swpclear.module")
 
 local M = {}
 M.config = {
@@ -16,7 +16,9 @@ end
 
 -- "hello" is a public method for the plugin
 M.swpclr = function()
-    module.my_first_function()
+    local val = module.my_first_function()
+    print(val)
+
 end
 
 return M
