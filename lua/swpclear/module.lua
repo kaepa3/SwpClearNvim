@@ -4,25 +4,32 @@ local M = {}
 local api = vim.api
 local buf, win
 
-M.my_first_function = function()
-  print("nasi")
-  buf = api.nvim_create_buf(false, true) -- create new emtpy buffer
-  local git_log_output = api.nvim_call_function("system", { "git log -n 30 --oneline" })
-  local git_logs = vim.split(git_log_output, "\n")
-  api.nvim_buf_set_lines(buf, 0, -1, true, git_logs)
-  api.nvim_buf_set_option(buf, "bufhidden", "wipe")
+function isFile(name)
+  if type(name) ~= "string" then return false end
+  if not isDir(name) then
+    return os.rename(name, name) and true or false
+    -- note that the short evaluation is to
+    -- return false instead of a possible nil
+  end
+  return false
+end
 
-  local opts = {
-    style = "minimal",
-    relative = "editor",
-    width = 100,
-    height = 100,
-    row = 0,
-    col = 0,
-  }
-  win = api.nvim_open_win(buf, true, opts)
-  --
-  return "ahello world!"
+M.my_first_function = function(config)
+  buf = api.nvim_create_buf(false, true) -- create new emtpy buffer
+
+  local filenames_output = api.nvim_call_function("system", { "ls -1 " .. config.path })
+  local filenames = vim.split(filenames_output, "\n")
+
+  for i, m in ipairs(filenames) do
+    local delPath = config.path .. m
+    if isFile then
+      print(string.format("%d[%s] delete", i, m))
+      os.remove(delPath)
+    end
+  end
+
+  print("SwpClear-end")
+  return
 end
 
 return M

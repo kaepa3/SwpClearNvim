@@ -5,6 +5,7 @@ local M = {}
 M.config = {
   -- default config
   opt = "Hello!",
+  path = "~/.local/state/nvim/swap/"
 }
 
 -- setup is the public method to setup your plugin
@@ -16,7 +17,8 @@ end
 
 -- "hello" is a public method for the plugin
 M.swpclr = function()
-  module.my_first_function()
+  module.my_first_function(M.config)
 end
+
 
 return M
