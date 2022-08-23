@@ -5,7 +5,9 @@ local api = vim.api
 local buf, win
 
 function isFile(name)
-  if type(name) ~= "string" then return false end
+  if type(name) ~= "string" then
+    return false
+  end
   if not isDir(name) then
     return os.rename(name, name) and true or false
     -- note that the short evaluation is to
