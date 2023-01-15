@@ -1,5 +1,4 @@
 -- module represents a lua module for the plugin
-require("sa")
 local M = {}
 
 print("require")
