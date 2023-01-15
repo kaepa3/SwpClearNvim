@@ -1,6 +1,6 @@
 -- main module file
 local module = require("swpclear.module")
-
+print("require")
 local M = {}
 M.config = {
   -- default config

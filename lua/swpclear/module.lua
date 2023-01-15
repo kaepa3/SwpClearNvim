@@ -1,37 +1,50 @@
 -- module represents a lua module for the plugin
+require("sa")
 local M = {}
 
+print("require")
 local api = vim.api
-local buf, win
+
+function exists(name)
+  if type(name) ~= "string" then
+    return false
+  end
+  return os.rename(name, name) and true or false
+end
 
 function isFile(name)
   if type(name) ~= "string" then
     return false
   end
-  if not isDir(name) then
-    return os.rename(name, name) and true or false
-    -- note that the short evaluation is to
-    -- return false instead of a possible nil
+  if not exists(name) then
+    return false
+  end
+  local f = io.open(name)
+  if f then
+    f:close()
+    return true
   end
   return false
 end
 
-M.my_first_function = function(config)
-  buf = api.nvim_create_buf(false, true) -- create new emtpy buffer
+function isDir(name)
+  return (exists(name) and not isFile(name))
+end
 
+M.my_first_function = function(config)
   local filenames_output = api.nvim_call_function("system", { "ls -1 " .. config.path })
   local filenames = vim.split(filenames_output, "\n")
 
   for i, m in ipairs(filenames) do
+    print(m)
     local delPath = config.path .. m
-    if isFile then
+    if isFile(delPath) then
       print(string.format("%d[%s] delete", i, m))
       os.remove(delPath)
     end
   end
 
   print("SwpClear-end")
-  return
 end
 
 return M
